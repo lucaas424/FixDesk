@@ -1,0 +1,77 @@
+@startuml
+title FixDesk - Diagrama de Secuencia
+subtitle Caso de Uso: Cambiar estado de reparación
+
+actor Tecnico
+
+participant "OrdenController" as Controller
+participant "OrdenService" as Service
+participant "OrdenRepository" as Repository
+participant "OrdenReparacion" as Orden
+participant "HistorialRepository" as HistorialRepo
+participant "NotificacionService" as NotifService
+participant "NotificacionRepository" as NotifRepo
+database "MySQL\nfixdesk_db" as DB
+
+Tecnico -> Controller : solicitarCambioEstado(ordenId, nuevoEstado)
+
+Controller -> Service : cambiarEstado(ordenId, nuevoEstado, usuarioActual)
+
+Service -> Repository : buscarPorId(ordenId)
+
+Repository -> DB : SELECT orden
+DB --> Repository : datos de la orden
+Repository --> Service : OrdenReparacion
+
+alt Orden inexistente
+    Service --> Controller : error("Orden no encontrada")
+    Controller --> Tecnico : mostrar mensaje de error
+
+else Orden encontrada
+
+    Service -> Service : validarPermisos(usuarioActual, orden)
+
+    alt Técnico no autorizado
+        Service --> Controller : error("Sin permisos")
+        Controller --> Tecnico : mostrar acceso denegado
+
+    else Usuario autorizado
+
+        Service -> Service : validarTransicion(estadoActual, nuevoEstado)
+
+        alt Transición no permitida
+            Service --> Controller : error("Transición inválida")
+            Controller --> Tecnico : mostrar estado no permitido
+
+        else Transición válida
+
+            Service -> Orden : cambiarEstado(nuevoEstado)
+            Orden --> Service : estado actualizado
+
+            Service -> Repository : guardar(orden)
+            Repository -> DB : UPDATE orden_reparacion
+            DB --> Repository : confirmación
+
+            Service -> HistorialRepo : registrarCambio(...)
+            HistorialRepo -> DB : INSERT historial_estado
+            DB --> HistorialRepo : confirmación
+
+            alt nuevoEstado == LISTO_PARA_RETIRAR
+                Service -> NotifService : generarNotificacion(cliente, orden)
+
+                NotifService -> NotifRepo : guardar(notificacion)
+                NotifRepo -> DB : INSERT notificacion
+                DB --> NotifRepo : confirmación
+
+                NotifRepo --> NotifService : notificación creada
+                NotifService --> Service : notificación generada
+            end
+
+            Service --> Controller : cambio exitoso
+            Controller --> Tecnico : mostrar nuevo estado
+
+        end
+    end
+end
+
+@enduml

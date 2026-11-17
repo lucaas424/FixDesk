@@ -1,0 +1,176 @@
+@startuml
+title FixDesk - Diagrama de Clases
+
+top to bottom direction
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 55
+skinparam ranksep 55
+
+' =========================
+' USUARIOS
+' =========================
+
+abstract class Usuario {
+    - id: int
+    - nombre: str
+    - apellido: str
+    - email: str
+    - password_hash: str
+    - rol: RolUsuario
+    - activo: bool
+    - fecha_creacion: datetime
+
+    + verificar_password(password): bool
+    + activar(): void
+    + desactivar(): void
+}
+
+class Administrador {
+    + gestionar_sistema(): void
+}
+
+class Cliente {
+    + consultar_equipos(): list
+    + consultar_ordenes(): list
+    + consultar_notificaciones(): list
+}
+
+class Tecnico {
+    + consultar_ordenes_asignadas(): list
+}
+
+Usuario <|-- Administrador
+Usuario <|-- Cliente
+Usuario <|-- Tecnico
+
+Administrador -[hidden]- Cliente
+Cliente -[hidden]- Tecnico
+
+' =========================
+' DOMINIO PRINCIPAL
+' =========================
+
+class Equipo {
+    - id: int
+    - tipo: TipoEquipo
+    - marca: str
+    - modelo: str
+    - numero_serie: str
+    - activo: bool
+    - fecha_registro: datetime
+
+    + actualizar_datos(): void
+    + activar(): void
+    + desactivar(): void
+}
+
+class OrdenReparacion {
+    - id: int
+    - problema_reportado: str
+    - prioridad: PrioridadOrden
+    - estado_actual: EstadoOrden
+    - fecha_recepcion: datetime
+    - fecha_estimada: date
+    - fecha_finalizacion: datetime
+    - observaciones: str
+
+    + asignar_tecnico(tecnico): void
+    + cambiar_estado(estado): void
+    + cambiar_prioridad(prioridad): void
+    + cancelar(): void
+}
+
+class Notificacion {
+    - id: int
+    - mensaje: str
+    - leida: bool
+    - fecha_creacion: datetime
+
+    + marcar_como_leida(): void
+}
+
+Cliente "1" o-- "0..*" Equipo : posee
+Equipo "1" -- "0..*" OrdenReparacion : tiene
+Tecnico "0..1" -- "0..*" OrdenReparacion : atiende
+Cliente "1" -- "0..*" Notificacion : recibe
+OrdenReparacion "1" -- "0..*" Notificacion : genera
+
+Equipo -[hidden]- OrdenReparacion
+OrdenReparacion -[hidden]- Notificacion
+
+' =========================
+' DETALLE DE REPARACION
+' =========================
+
+class Diagnostico {
+    - id: int
+    - descripcion: str
+    - fecha_creacion: datetime
+    - fecha_actualizacion: datetime
+
+    + actualizar(descripcion): void
+}
+
+class TareaReparacion {
+    - id: int
+    - descripcion: str
+    - fecha_realizacion: datetime
+
+    + actualizar(descripcion): void
+}
+
+class HistorialEstado {
+    - id: int
+    - estado_anterior: EstadoOrden
+    - estado_nuevo: EstadoOrden
+    - fecha_cambio: datetime
+}
+
+OrdenReparacion "1" *-- "0..1" Diagnostico : contiene
+OrdenReparacion "1" *-- "0..*" TareaReparacion : contiene
+OrdenReparacion "1" *-- "1..*" HistorialEstado : mantiene
+Usuario "1" -- "0..*" HistorialEstado : registra
+
+Diagnostico -[hidden]- TareaReparacion
+TareaReparacion -[hidden]- HistorialEstado
+
+' =========================
+' ENUMERACIONES
+' =========================
+
+enum RolUsuario {
+    ADMINISTRADOR
+    TECNICO
+    CLIENTE
+}
+
+enum TipoEquipo {
+    NOTEBOOK
+    CELULAR
+    TABLET
+}
+
+enum PrioridadOrden {
+    BAJA
+    NORMAL
+    ALTA
+    URGENTE
+}
+
+enum EstadoOrden {
+    RECIBIDO
+    EN_DIAGNOSTICO
+    EN_REPARACION
+    LISTO_PARA_RETIRAR
+    FINALIZADO
+    CANCELADO
+}
+
+RolUsuario -[hidden]- TipoEquipo
+TipoEquipo -[hidden]- PrioridadOrden
+PrioridadOrden -[hidden]- EstadoOrden
+
+@enduml

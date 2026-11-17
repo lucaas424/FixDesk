@@ -1,0 +1,102 @@
+@startuml
+title FixDesk - Diagrama Entidad-Relación
+
+hide methods
+hide stereotypes
+
+skinparam shadowing false
+skinparam linetype ortho
+skinparam entity {
+    BackgroundColor white
+}
+
+entity "USUARIO" as usuario {
+    * id : INT <<PK>>
+    --
+    nombre : VARCHAR(80)
+    apellido : VARCHAR(80)
+    email : VARCHAR(120) <<UQ>>
+    password_hash : VARCHAR(255)
+    rol : ENUM
+    activo : BOOLEAN
+    fecha_creacion : DATETIME
+}
+
+entity "EQUIPO" as equipo {
+    * id : INT <<PK>>
+    --
+    * cliente_id : INT <<FK>>
+    tipo : ENUM
+    marca : VARCHAR(80)
+    modelo : VARCHAR(100)
+    numero_serie : VARCHAR(120)
+    activo : BOOLEAN
+    fecha_registro : DATETIME
+}
+
+entity "ORDEN_REPARACION" as orden {
+    * id : INT <<PK>>
+    --
+    * equipo_id : INT <<FK>>
+    tecnico_id : INT <<FK>>
+    problema_reportado : TEXT
+    prioridad : ENUM
+    estado_actual : ENUM
+    fecha_recepcion : DATETIME
+    fecha_estimada : DATE
+    fecha_finalizacion : DATETIME
+    observaciones : TEXT
+}
+
+entity "DIAGNOSTICO" as diagnostico {
+    * id : INT <<PK>>
+    --
+    * orden_id : INT <<FK, UQ>>
+    descripcion : TEXT
+    fecha_creacion : DATETIME
+    fecha_actualizacion : DATETIME
+}
+
+entity "TAREA_REPARACION" as tarea {
+    * id : INT <<PK>>
+    --
+    * orden_id : INT <<FK>>
+    descripcion : TEXT
+    fecha_realizacion : DATETIME
+}
+
+entity "HISTORIAL_ESTADO" as historial {
+    * id : INT <<PK>>
+    --
+    * orden_id : INT <<FK>>
+    * usuario_id : INT <<FK>>
+    estado_anterior : ENUM
+    estado_nuevo : ENUM
+    fecha_cambio : DATETIME
+}
+
+entity "NOTIFICACION" as notificacion {
+    * id : INT <<PK>>
+    --
+    * cliente_id : INT <<FK>>
+    * orden_id : INT <<FK>>
+    mensaje : VARCHAR(255)
+    leida : BOOLEAN
+    fecha_creacion : DATETIME
+}
+
+usuario ||--o{ equipo : "posee"
+equipo ||--o{ orden : "tiene"
+
+usuario ||--o{ orden : "técnico asignado"
+
+orden ||--o| diagnostico : "posee"
+orden ||--o{ tarea : "contiene"
+orden ||--|{ historial : "registra"
+
+usuario ||--o{ historial : "realiza cambio"
+
+usuario ||--o{ notificacion : "recibe"
+orden ||--o{ notificacion : "genera"
+
+@enduml

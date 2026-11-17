@@ -1,0 +1,96 @@
+@startuml
+title FixDesk - Diagrama General de Casos de Uso
+
+left to right direction
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam linetype polyline
+skinparam nodesep 45
+skinparam ranksep 55
+
+' =========================
+' ACTORES
+' =========================
+
+actor Usuario
+actor Administrador
+actor Tecnico
+actor Cliente
+
+Usuario <|-- Administrador
+Usuario <|-- Tecnico
+Usuario <|-- Cliente
+
+' =========================
+' SISTEMA
+' =========================
+
+rectangle "FixDesk" {
+
+    package "Acceso" {
+        usecase "Iniciar sesión" as UC_Login
+        usecase "Cerrar sesión" as UC_Logout
+    }
+
+    package "Administración" {
+        usecase "Gestionar clientes" as UC_Clientes
+        usecase "Gestionar técnicos" as UC_Tecnicos
+        usecase "Gestionar equipos" as UC_Equipos
+        usecase "Gestionar órdenes\nde reparación" as UC_Ordenes
+        usecase "Asignar / reasignar\ntécnico" as UC_Asignar
+        usecase "Consultar y filtrar\nórdenes" as UC_Consultar
+    }
+
+    package "Trabajo técnico" {
+        usecase "Consultar órdenes\nasignadas" as UC_Asignadas
+        usecase "Registrar / modificar\ndiagnóstico" as UC_Diagnostico
+        usecase "Registrar tareas\nde reparación" as UC_Tareas
+        usecase "Cambiar estado\nde reparación" as UC_Estado
+        usecase "Consultar historial\nde estados" as UC_Historial
+    }
+
+    package "Portal del cliente" {
+        usecase "Consultar mis equipos" as UC_MisEquipos
+        usecase "Consultar mis\nreparaciones" as UC_MisReparaciones
+        usecase "Consultar\nnotificaciones" as UC_Notificaciones
+    }
+}
+
+' =========================
+' FUNCIONES COMUNES
+' =========================
+
+Usuario --> UC_Login
+Usuario --> UC_Logout
+
+' =========================
+' ADMINISTRADOR
+' =========================
+
+Administrador --> UC_Clientes
+Administrador --> UC_Tecnicos
+Administrador --> UC_Equipos
+Administrador --> UC_Ordenes
+Administrador --> UC_Asignar
+Administrador --> UC_Consultar
+
+' =========================
+' TECNICO
+' =========================
+
+Tecnico --> UC_Asignadas
+Tecnico --> UC_Diagnostico
+Tecnico --> UC_Tareas
+Tecnico --> UC_Estado
+Tecnico --> UC_Historial
+
+' =========================
+' CLIENTE
+' =========================
+
+Cliente --> UC_MisEquipos
+Cliente --> UC_MisReparaciones
+Cliente --> UC_Notificaciones
+
+@enduml
