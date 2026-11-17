@@ -74,6 +74,7 @@ Administrador --> UC_Equipos
 Administrador --> UC_Ordenes
 Administrador --> UC_Asignar
 Administrador --> UC_Consultar
+Administrador --> UC_Estado
 
 ' =========================
 ' TECNICO

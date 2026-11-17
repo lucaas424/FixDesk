@@ -1,0 +1,108 @@
+@startuml diagrama_arquitectura
+title FixDesk - Diagrama de Arquitectura
+
+left to right direction
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+actor "Usuario" as User
+
+package "Cliente Web" {
+    component "Navegador Web" as Browser
+}
+
+package "Aplicación FixDesk - Flask" {
+
+    package "Controladores" {
+        component "AuthController" as AuthController
+        component "ClienteController" as ClienteController
+        component "EquipoController" as EquipoController
+        component "OrdenController" as OrdenController
+    }
+
+    package "Servicios" {
+        component "AuthService" as AuthService
+        component "ClienteService" as ClienteService
+        component "EquipoService" as EquipoService
+        component "OrdenService" as OrdenService
+        component "NotificacionService" as NotificacionService
+    }
+
+    package "Repositorios" {
+        component "UsuarioRepository" as UsuarioRepo
+        component "EquipoRepository" as EquipoRepo
+        component "OrdenRepository" as OrdenRepo
+        component "HistorialRepository" as HistorialRepo
+        component "NotificacionRepository" as NotificacionRepo
+    }
+
+    package "Modelo / Persistencia" {
+        component "Modelos SQLAlchemy" as Models
+        component "Flask-SQLAlchemy" as SQLAlchemy
+        component "PyMySQL" as PyMySQL
+    }
+
+    package "Vista" {
+        component "Templates\nHTML / Jinja2" as Templates
+        component "CSS / Bootstrap" as CSS
+        component "JavaScript" as JS
+    }
+
+    package "Patrones de Diseño" {
+        component "ConfigSingleton\n<<Singleton>>" as Singleton
+        component "NotificacionObserver\n<<Observer>>" as Observer
+        component "PrioridadStrategy\n<<Strategy>>" as Strategy
+    }
+}
+
+database "MySQL\nfixdesk_db" as DB
+
+User --> Browser
+
+Browser --> AuthController : HTTP
+Browser --> ClienteController : HTTP
+Browser --> EquipoController : HTTP
+Browser --> OrdenController : HTTP
+
+AuthController --> AuthService
+ClienteController --> ClienteService
+EquipoController --> EquipoService
+OrdenController --> OrdenService
+
+AuthController --> Templates : renderiza
+ClienteController --> Templates : renderiza
+EquipoController --> Templates : renderiza
+OrdenController --> Templates : renderiza
+
+Templates --> Browser : HTML
+CSS --> Templates
+JS --> Templates
+
+OrdenService --> NotificacionService
+
+AuthService --> UsuarioRepo
+ClienteService --> UsuarioRepo
+EquipoService --> EquipoRepo
+OrdenService --> OrdenRepo
+OrdenService --> HistorialRepo
+NotificacionService --> NotificacionRepo
+
+UsuarioRepo --> Models
+EquipoRepo --> Models
+OrdenRepo --> Models
+HistorialRepo --> Models
+NotificacionRepo --> Models
+
+Models --> SQLAlchemy
+SQLAlchemy --> PyMySQL
+PyMySQL --> DB
+
+OrdenService ..> Observer : utiliza
+OrdenService ..> Strategy : utiliza
+
+AuthService ..> Singleton : configuración
+OrdenService ..> Singleton : configuración
+
+@enduml
