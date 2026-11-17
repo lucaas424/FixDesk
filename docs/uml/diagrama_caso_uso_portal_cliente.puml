@@ -1,0 +1,51 @@
+@startuml
+title FixDesk - Caso de Uso Detallado\nPortal del Cliente
+
+left to right direction
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 45
+
+actor Cliente
+
+rectangle "FixDesk - Portal del Cliente" {
+
+    usecase "Iniciar sesión" as Login
+
+    usecase "Consultar mis equipos" as Equipos
+
+    usecase "Consultar mis\nreparaciones" as Reparaciones
+
+    usecase "Ver detalle de\nreparación" as Detalle
+
+    usecase "Consultar estado\nactual" as Estado
+
+    usecase "Consultar diagnóstico" as Diagnostico
+
+    usecase "Consultar tareas\nrealizadas" as Tareas
+
+    usecase "Consultar historial\nde estados" as Historial
+
+    usecase "Consultar\nnotificaciones" as Notificaciones
+
+    usecase "Marcar notificación\ncomo leída" as Leida
+}
+
+Cliente --> Login
+Cliente --> Equipos
+Cliente --> Reparaciones
+Cliente --> Notificaciones
+
+Reparaciones ..> Detalle : <<include>>
+
+Detalle ..> Estado : <<include>>
+Detalle ..> Diagnostico : <<include>>
+Detalle ..> Tareas : <<include>>
+Detalle ..> Historial : <<include>>
+
+Leida ..> Notificaciones : <<extend>>
+
+@enduml

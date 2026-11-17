@@ -1,0 +1,72 @@
+@startuml
+title FixDesk - Diagrama de Secuencia\nCaso de Uso: Crear orden de reparación
+
+actor Administrador
+
+participant "OrdenController" as Controller
+participant "OrdenService" as Service
+participant "EquipoRepository" as EquipoRepo
+participant "UsuarioRepository" as UsuarioRepo
+participant "OrdenRepository" as OrdenRepo
+participant "OrdenReparacion" as Orden
+database "MySQL\nfixdesk_db" as DB
+
+Administrador -> Controller : solicitarCreacionOrden(datosOrden)
+
+Controller -> Service : crearOrden(datosOrden, usuarioActual)
+
+Service -> Service : validarDatos(datosOrden)
+
+alt Datos inválidos
+
+    Service --> Controller : error("Datos inválidos")
+    Controller --> Administrador : mostrar errores de validación
+
+else Datos válidos
+
+    Service -> EquipoRepo : buscarPorId(equipoId)
+
+    EquipoRepo -> DB : SELECT equipo
+    DB --> EquipoRepo : datos del equipo
+    EquipoRepo --> Service : Equipo
+
+    alt Equipo inexistente o inactivo
+
+        Service --> Controller : error("Equipo no disponible")
+        Controller --> Administrador : mostrar mensaje de error
+
+    else Equipo válido
+
+        Service -> UsuarioRepo : buscarTecnicoPorId(tecnicoId)
+
+        UsuarioRepo -> DB : SELECT usuario técnico
+        DB --> UsuarioRepo : datos del técnico
+        UsuarioRepo --> Service : Tecnico
+
+        alt Técnico inexistente o inactivo
+
+            Service --> Controller : error("Técnico no disponible")
+            Controller --> Administrador : mostrar mensaje de error
+
+        else Técnico válido
+
+            Service -> Orden : crear(datosOrden, equipo, tecnico)
+
+            Orden --> Service : nueva orden
+
+            Service -> OrdenRepo : guardar(orden)
+
+            OrdenRepo -> DB : INSERT orden_reparacion
+            DB --> OrdenRepo : confirmación
+
+            OrdenRepo --> Service : orden creada
+
+            Service --> Controller : creación exitosa
+
+            Controller --> Administrador : mostrar orden creada
+
+        end
+    end
+end
+
+@enduml

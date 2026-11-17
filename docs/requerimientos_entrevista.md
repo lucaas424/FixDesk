@@ -153,7 +153,27 @@ Estas funcionalidades fueron descartadas para mantener el alcance del sistema en
 
 ---
 
-## 6. Resultado del relevamiento
+## 6. Visita simulada al establecimiento
+
+Como complemento del relevamiento se plantea una visita simulada a un pequeño local de servicio técnico de equipos informáticos.
+
+Durante la observación del funcionamiento diario se identifican tres sectores principales:
+
+- Recepción y administración.
+- Área de trabajo de los técnicos.
+- Sector de almacenamiento temporal de equipos ingresados y equipos listos para retirar.
+
+En recepción se reciben los dispositivos y se recopilan los datos del cliente, el tipo de equipo y el problema informado. Se observa que parte de esta información puede quedar distribuida entre anotaciones, mensajes y registros independientes.
+
+Posteriormente, los equipos son derivados al sector técnico, donde cada técnico necesita conocer qué dispositivos tiene asignados, cuál fue el problema reportado y qué tareas debe realizar.
+
+También se observa la necesidad de que administración pueda consultar rápidamente el estado de cualquier reparación sin tener que interrumpir al técnico responsable.
+
+Finalmente, cuando un equipo se encuentra listo para retirar, es necesario comunicar dicha situación al cliente y conservar un registro del avance que tuvo la reparación.
+
+La visita permite confirmar la necesidad de centralizar la información de clientes, equipos, técnicos y órdenes dentro de un único sistema, manteniendo además un historial de los cambios realizados.
+
+## 7. Resultado del relevamiento
 
 El relevamiento permitió determinar que la principal necesidad del cliente es disponer de un sistema centralizado que permita conocer en todo momento:
 

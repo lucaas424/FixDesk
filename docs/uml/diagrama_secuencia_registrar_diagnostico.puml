@@ -1,0 +1,90 @@
+@startuml
+title FixDesk - Diagrama de Secuencia\nCaso de Uso: Registrar diagnóstico
+
+actor Tecnico
+
+participant "OrdenController" as Controller
+participant "OrdenService" as Service
+participant "OrdenRepository" as OrdenRepo
+participant "DiagnosticoRepository" as DiagnosticoRepo
+participant "Diagnostico" as Diagnostico
+database "MySQL\nfixdesk_db" as DB
+
+Tecnico -> Controller : solicitarRegistroDiagnostico(ordenId, descripcion)
+
+Controller -> Service : registrarDiagnostico(ordenId, descripcion, usuarioActual)
+
+Service -> Service : validarDescripcion(descripcion)
+
+alt Descripción inválida
+
+    Service --> Controller : error("Diagnóstico inválido")
+    Controller --> Tecnico : mostrar errores de validación
+
+else Descripción válida
+
+    Service -> OrdenRepo : buscarPorId(ordenId)
+
+    OrdenRepo -> DB : SELECT orden_reparacion
+    DB --> OrdenRepo : datos de la orden
+    OrdenRepo --> Service : OrdenReparacion
+
+    alt Orden inexistente
+
+        Service --> Controller : error("Orden no encontrada")
+        Controller --> Tecnico : mostrar mensaje de error
+
+    else Orden encontrada
+
+        Service -> Service : validarTecnicoAsignado(usuarioActual, orden)
+
+        alt Técnico no autorizado
+
+            Service --> Controller : error("Sin permisos")
+            Controller --> Tecnico : mostrar acceso denegado
+
+        else Técnico autorizado
+
+            Service -> DiagnosticoRepo : buscarPorOrden(ordenId)
+
+            DiagnosticoRepo -> DB : SELECT diagnostico
+            DB --> DiagnosticoRepo : resultado
+            DiagnosticoRepo --> Service : diagnosticoActual
+
+            alt Diagnóstico inexistente
+
+                Service -> Diagnostico : crear(descripcion, orden)
+
+                Diagnostico --> Service : nuevo diagnóstico
+
+                Service -> DiagnosticoRepo : guardar(diagnostico)
+
+                DiagnosticoRepo -> DB : INSERT diagnostico
+                DB --> DiagnosticoRepo : confirmación
+
+                DiagnosticoRepo --> Service : diagnóstico creado
+
+            else Diagnóstico existente
+
+                Service -> Diagnostico : actualizar(descripcion)
+
+                Diagnostico --> Service : diagnóstico actualizado
+
+                Service -> DiagnosticoRepo : guardar(diagnostico)
+
+                DiagnosticoRepo -> DB : UPDATE diagnostico
+                DB --> DiagnosticoRepo : confirmación
+
+                DiagnosticoRepo --> Service : diagnóstico actualizado
+
+            end
+
+            Service --> Controller : operación exitosa
+
+            Controller --> Tecnico : mostrar diagnóstico guardado
+
+        end
+    end
+end
+
+@enduml
