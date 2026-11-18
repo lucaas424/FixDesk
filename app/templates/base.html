@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}FixDesk{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    {% if current_user.is_authenticated %}
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="logo-mark">F</span>
+
+            <div>
+                <strong>FixDesk</strong>
+                <small>Servicio técnico</small>
+            </div>
+        </div>
+
+        <div class="navbar-user">
+            <div class="user-info">
+                <strong>
+                    {{ current_user.nombre }}
+                    {{ current_user.apellido }}
+                </strong>
+
+                <span>
+                    {{ current_user.rol.value }}
+                </span>
+            </div>
+
+            <form
+                action="{{ url_for('auth.logout') }}"
+                method="POST"
+            >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <button
+                    class="btn-logout"
+                    type="submit"
+                >
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </header>
+    {% endif %}
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+Iniciar sesión | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="login-page">
+
+    <section class="login-panel">
+
+        <div class="login-brand">
+            <div class="login-logo">
+                F
+            </div>
+
+            <h1>FixDesk</h1>
+
+            <p>
+                Sistema de gestión de servicio técnico
+                de equipos informáticos
+            </p>
+        </div>
+
+
+        <form
+            class="login-form"
+            method="POST"
+            action="{{ url_for('auth.login') }}"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <div class="form-group">
+                <label for="email">
+                    Correo electrónico
+                </label>
+
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value="{{ email or '' }}"
+                    placeholder="usuario@fixdesk.com"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="password">
+                    Contraseña
+                </label>
+
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Ingresá tu contraseña"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+
+            <button
+                class="btn-primary"
+                type="submit"
+            >
+                Iniciar sesión
+            </button>
+
+        </form>
+
+    </section>
+
+</div>
+
+{% endblock %}

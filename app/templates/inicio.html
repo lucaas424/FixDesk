@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+Inicio | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="welcome-card">
+
+        <div>
+            <span class="eyebrow">
+                PANEL PRINCIPAL
+            </span>
+
+            <h1>
+                Bienvenido,
+                {{ current_user.nombre }}
+            </h1>
+
+            <p>
+                Accediste correctamente al sistema FixDesk.
+            </p>
+        </div>
+
+        <div class="role-badge">
+            {{ current_user.rol.value }}
+        </div>
+
+    </section>
+
+
+    <section class="dashboard-grid">
+
+        <article class="dashboard-card">
+            <div class="card-icon">
+                01
+            </div>
+
+            <h2>Órdenes</h2>
+
+            <p>
+                Gestión y seguimiento de órdenes
+                de reparación.
+            </p>
+        </article>
+
+
+        <article class="dashboard-card">
+            <div class="card-icon">
+                02
+            </div>
+
+            <h2>Equipos</h2>
+
+            <p>
+                Consulta y administración de los
+                equipos registrados.
+            </p>
+        </article>
+
+
+        <article class="dashboard-card">
+            <div class="card-icon">
+                03
+            </div>
+
+            <h2>Notificaciones</h2>
+
+            <p>
+                Seguimiento de novedades y cambios
+                de estado.
+            </p>
+        </article>
+
+    </section>
+
+</div>
+
+{% endblock %}
