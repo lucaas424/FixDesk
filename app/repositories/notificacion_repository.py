@@ -9,7 +9,12 @@ class NotificacionRepository:
     @staticmethod
     def buscar_por_id(notificacion_id):
         return db.session.get(Notificacion, notificacion_id)
-
+    
+    @staticmethod
+    def agregar(notificacion):
+        db.session.add(notificacion)
+        return notificacion
+    
     @staticmethod
     def listar_por_cliente(cliente_id):
         sentencia = select(Notificacion).where(

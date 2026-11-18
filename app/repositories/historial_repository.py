@@ -11,6 +11,11 @@ class HistorialRepository:
         return db.session.get(HistorialEstado, historial_id)
 
     @staticmethod
+    def agregar(historial):
+        db.session.add(historial)
+        return historial
+
+    @staticmethod
     def listar_por_orden(orden_id):
         sentencia = select(HistorialEstado).where(
             HistorialEstado.orden_id == orden_id
