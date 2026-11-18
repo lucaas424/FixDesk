@@ -802,6 +802,98 @@ body {
     font-size: 12px;
 }
 
+/* FORMULARIOS DE OPERACION */
+
+.action-form {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.action-form select {
+    flex: 1;
+
+    padding: 12px 13px;
+
+    border: 1px solid #cfd6e1;
+    border-radius: 8px;
+
+    background: white;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.action-form select:focus {
+    border-color: var(--primary-light);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.action-button {
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.form-divider {
+    height: 1px;
+
+    margin: 25px 0;
+
+    background: var(--border);
+}
+
+.vertical-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.vertical-form label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.vertical-form textarea {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    resize: vertical;
+
+    border: 1px solid #cfd6e1;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+
+    outline: none;
+}
+
+.vertical-form textarea:focus {
+    border-color: var(--primary-light);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.form-submit {
+    width: auto;
+
+    align-self: flex-start;
+
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 800px) {
@@ -821,5 +913,17 @@ body {
 
     .user-info {
         display: none;
+    }
+    .action-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .action-button {
+        width: 100%;
+    }
+
+    .form-submit {
+        width: 100%;
     }
 }

@@ -102,6 +102,78 @@ Orden #{{ orden.id }} | FixDesk
     </section>
 
 
+    {% if current_user.rol == RolUsuario.TECNICO %}
+
+    <section class="content-card">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="detail-label">
+                    ACCIONES DEL TÉCNICO
+                </span>
+
+                <h2>Cambiar estado</h2>
+            </div>
+
+        </div>
+
+
+        {% if estados_permitidos %}
+
+        <form
+            method="POST"
+            action="{{ url_for('orden.cambiar_estado', orden_id=orden.id) }}"
+            class="action-form"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <select
+                name="nuevo_estado"
+                required
+            >
+
+                <option value="">
+                    Seleccionar nuevo estado
+                </option>
+
+                {% for estado in estados_permitidos %}
+
+                <option value="{{ estado.value }}">
+                    {{ estado.value }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <button
+                type="submit"
+                class="btn-primary action-button"
+            >
+                Actualizar estado
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <p class="muted-text">
+            Esta orden no admite más cambios de estado.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
     <section class="content-card">
 
         <span class="detail-label">
@@ -132,6 +204,7 @@ Orden #{{ orden.id }} | FixDesk
     <section class="content-card">
 
         <div class="section-heading">
+
             <div>
                 <span class="detail-label">
                     DIAGNÓSTICO
@@ -139,19 +212,65 @@ Orden #{{ orden.id }} | FixDesk
 
                 <h2>Diagnóstico técnico</h2>
             </div>
+
         </div>
+
 
         {% if diagnostico %}
 
-            <p class="detail-text">
-                {{ diagnostico.descripcion }}
-            </p>
+        <p class="detail-text">
+            {{ diagnostico.descripcion }}
+        </p>
 
         {% else %}
 
-            <p class="muted-text">
-                Todavía no se registró un diagnóstico.
-            </p>
+        <p class="muted-text">
+            Todavía no se registró un diagnóstico.
+        </p>
+
+        {% endif %}
+
+
+        {% if current_user.rol == RolUsuario.TECNICO %}
+
+        <div class="form-divider"></div>
+
+        <form
+            method="POST"
+            action="{{ url_for('orden.registrar_diagnostico', orden_id=orden.id) }}"
+            class="vertical-form"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <label for="diagnostico">
+                {% if diagnostico %}
+                    Actualizar diagnóstico
+                {% else %}
+                    Registrar diagnóstico
+                {% endif %}
+            </label>
+
+            <textarea
+                id="diagnostico"
+                name="descripcion"
+                rows="4"
+                placeholder="Describí el diagnóstico técnico..."
+                required
+            >{% if diagnostico %}{{ diagnostico.descripcion }}{% endif %}</textarea>
+
+            <button
+                type="submit"
+                class="btn-primary form-submit"
+            >
+                Guardar diagnóstico
+            </button>
+
+        </form>
 
         {% endif %}
 
@@ -212,6 +331,46 @@ Orden #{{ orden.id }} | FixDesk
         <p class="muted-text">
             Todavía no existen tareas registradas.
         </p>
+
+        {% endif %}
+
+
+        {% if current_user.rol == RolUsuario.TECNICO %}
+
+        <div class="form-divider"></div>
+
+        <form
+            method="POST"
+            action="{{ url_for('orden.registrar_tarea', orden_id=orden.id) }}"
+            class="vertical-form"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <label for="tarea">
+                Registrar nueva tarea
+            </label>
+
+            <textarea
+                id="tarea"
+                name="descripcion"
+                rows="3"
+                placeholder="Ej.: Limpieza interna del equipo..."
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="btn-primary form-submit"
+            >
+                Agregar tarea
+            </button>
+
+        </form>
 
         {% endif %}
 
