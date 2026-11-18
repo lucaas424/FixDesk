@@ -1,0 +1,29 @@
+from enum import Enum
+
+
+class RolUsuario(Enum):
+    ADMINISTRADOR = "ADMINISTRADOR"
+    TECNICO = "TECNICO"
+    CLIENTE = "CLIENTE"
+
+
+class TipoEquipo(Enum):
+    NOTEBOOK = "NOTEBOOK"
+    CELULAR = "CELULAR"
+    TABLET = "TABLET"
+
+
+class PrioridadOrden(Enum):
+    BAJA = "BAJA"
+    NORMAL = "NORMAL"
+    ALTA = "ALTA"
+    URGENTE = "URGENTE"
+
+
+class EstadoOrden(Enum):
+    RECIBIDO = "RECIBIDO"
+    EN_DIAGNOSTICO = "EN_DIAGNOSTICO"
+    EN_REPARACION = "EN_REPARACION"
+    LISTO_PARA_RETIRAR = "LISTO_PARA_RETIRAR"
+    FINALIZADO = "FINALIZADO"
+    CANCELADO = "CANCELADO"
