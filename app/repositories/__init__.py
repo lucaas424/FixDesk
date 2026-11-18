@@ -1,0 +1,7 @@
+from app.repositories.usuario_repository import UsuarioRepository
+from app.repositories.equipo_repository import EquipoRepository
+from app.repositories.orden_repository import OrdenRepository
+from app.repositories.diagnostico_repository import DiagnosticoRepository
+from app.repositories.tarea_repository import TareaRepository
+from app.repositories.historial_repository import HistorialRepository
+from app.repositories.notificacion_repository import NotificacionRepository
