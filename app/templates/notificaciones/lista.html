@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}
+Notificaciones | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                PORTAL DEL CLIENTE
+            </span>
+
+            <h1>Notificaciones</h1>
+
+            <p>
+                Consultá las novedades relacionadas
+                con tus reparaciones.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    <section class="notification-summary">
+
+        <div>
+            <span class="detail-label">
+                PENDIENTES
+            </span>
+
+            <strong>
+                {{ cantidad_no_leidas }}
+            </strong>
+        </div>
+
+        <p>
+            {% if cantidad_no_leidas == 0 %}
+                No tenés notificaciones pendientes.
+            {% elif cantidad_no_leidas == 1 %}
+                Tenés 1 notificación sin leer.
+            {% else %}
+                Tenés {{ cantidad_no_leidas }}
+                notificaciones sin leer.
+            {% endif %}
+        </p>
+
+    </section>
+
+
+    {% if notificaciones %}
+
+    <section class="notification-list">
+
+        {% for notificacion in notificaciones %}
+
+        <article
+            class="notification-card
+            {% if not notificacion.leida %}
+                notification-unread
+            {% endif %}"
+        >
+
+            <div class="notification-main">
+
+                <div class="notification-icon">
+                    {% if notificacion.leida %}
+                        ✓
+                    {% else %}
+                        !
+                    {% endif %}
+                </div>
+
+
+                <div class="notification-content">
+
+                    <div class="notification-header">
+
+                        <div>
+                            <span class="detail-label">
+                                ORDEN #{{ notificacion.orden_id }}
+                            </span>
+
+                            <h2>
+                                Actualización de reparación
+                            </h2>
+                        </div>
+
+
+                        {% if notificacion.leida %}
+
+                        <span class="read-badge">
+                            Leída
+                        </span>
+
+                        {% else %}
+
+                        <span class="unread-badge">
+                            Nueva
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <p>
+                        {{ notificacion.mensaje }}
+                    </p>
+
+
+                    {% if notificacion.fecha_creacion %}
+
+                    <span class="notification-date">
+                        {{ notificacion.fecha_creacion.strftime("%d/%m/%Y %H:%M") }}
+                    </span>
+
+                    {% endif %}
+
+
+                    {% if not notificacion.leida %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'notificacion.marcar_leida',
+                            notificacion_id=notificacion.id
+                        ) }}"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn-mark-read"
+                        >
+                            Marcar como leída
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </section>
+
+    {% else %}
+
+    <section class="empty-state">
+
+        <h2>No hay notificaciones</h2>
+
+        <p>
+            Todavía no existen novedades relacionadas
+            con tus reparaciones.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
