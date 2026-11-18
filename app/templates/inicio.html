@@ -36,27 +36,12 @@ Inicio | FixDesk
     <section class="dashboard-grid">
 
 
-        {% if current_user.rol.value in ["TECNICO", "ADMINISTRADOR"] %}
+        {% if current_user.rol.value == "CLIENTE" %}
 
         <a
-            href="{{ url_for('orden.lista') }}"
+            href="{{ url_for('cliente.reparaciones') }}"
             class="dashboard-card dashboard-link"
         >
-            <div class="card-icon">
-                01
-            </div>
-
-            <h2>Órdenes</h2>
-
-            <p>
-                Gestión y seguimiento de órdenes
-                de reparación.
-            </p>
-        </a>
-
-        {% else %}
-
-        <article class="dashboard-card">
             <div class="card-icon">
                 01
             </div>
@@ -64,44 +49,26 @@ Inicio | FixDesk
             <h2>Mis reparaciones</h2>
 
             <p>
-                Consulta el seguimiento de tus
-                reparaciones.
+                Consulta el seguimiento de tus reparaciones.
             </p>
-        </article>
-
-        {% endif %}
+        </a>
 
 
-        <article class="dashboard-card">
-
+        <a
+            href="{{ url_for('cliente.equipos') }}"
+            class="dashboard-card dashboard-link"
+        >
             <div class="card-icon">
                 02
             </div>
 
-            {% if current_user.rol.value == "CLIENTE" %}
-
             <h2>Mis equipos</h2>
 
             <p>
-                Consulta tus equipos registrados
-                en FixDesk.
+                Consulta tus equipos registrados en FixDesk.
             </p>
+        </a>
 
-            {% else %}
-
-            <h2>Equipos</h2>
-
-            <p>
-                Consulta y administración de los
-                equipos registrados.
-            </p>
-
-            {% endif %}
-
-        </article>
-
-
-        {% if current_user.rol.value == "CLIENTE" %}
 
         <a
             href="{{ url_for('notificacion.lista') }}"
@@ -119,9 +86,45 @@ Inicio | FixDesk
             </p>
         </a>
 
+
         {% else %}
 
+
+        <a
+            href="{{ url_for('orden.lista') }}"
+            class="dashboard-card dashboard-link"
+        >
+            <div class="card-icon">
+                01
+            </div>
+
+            <h2>Órdenes</h2>
+
+            <p>
+                Gestión y seguimiento de órdenes
+                de reparación.
+            </p>
+        </a>
+
+
         <article class="dashboard-card">
+
+            <div class="card-icon">
+                02
+            </div>
+
+            <h2>Equipos</h2>
+
+            <p>
+                Consulta y administración de los
+                equipos registrados.
+            </p>
+
+        </article>
+
+
+        <article class="dashboard-card">
+
             <div class="card-icon">
                 03
             </div>
@@ -132,6 +135,7 @@ Inicio | FixDesk
                 Seguimiento de novedades y cambios
                 de estado.
             </p>
+
         </article>
 
         {% endif %}

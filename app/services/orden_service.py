@@ -128,6 +128,38 @@ class OrdenService:
         return OrdenRepository.listar_por_tecnico(tecnico_id)
 
     @staticmethod
+    def listar_ordenes_cliente(cliente_id):
+        cliente = UsuarioRepository.buscar_por_id(cliente_id)
+
+        if cliente is None:
+            raise ValueError("El cliente indicado no existe.")
+
+        if cliente.rol != RolUsuario.CLIENTE:
+            raise ValueError(
+                "El usuario indicado no corresponde a un cliente."
+            )
+
+        equipos = EquipoRepository.listar_por_cliente(
+            cliente.id
+        )
+
+        ordenes = []
+
+        for equipo in equipos:
+            ordenes.extend(
+                OrdenRepository.listar_por_equipo(
+                    equipo.id
+                )
+            )
+
+        ordenes.sort(
+            key=lambda orden: orden.id,
+            reverse=True
+        )
+
+        return ordenes
+
+    @staticmethod
     def listar_ordenes_equipo(equipo_id):
         return OrdenRepository.listar_por_equipo(equipo_id)
 

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+Mis equipos | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                PORTAL DEL CLIENTE
+            </span>
+
+            <h1>Mis equipos</h1>
+
+            <p>
+                Consultá los equipos registrados
+                a tu nombre.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    {% if equipos %}
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Número de serie</th>
+                        <th>Estado</th>
+                        <th>Fecha de registro</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for equipo in equipos %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ equipo.marca }}
+                                {{ equipo.modelo }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ equipo.tipo.value }}
+                        </td>
+
+                        <td>
+                            {{ equipo.numero_serie }}
+                        </td>
+
+                        <td>
+
+                            {% if equipo.activo %}
+
+                            <span class="status-pill">
+                                ACTIVO
+                            </span>
+
+                            {% else %}
+
+                            <span class="status-pill">
+                                INACTIVO
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {% if equipo.fecha_registro %}
+                                {{ equipo.fecha_registro.strftime("%d/%m/%Y %H:%M") }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% else %}
+
+    <section class="empty-state">
+
+        <h2>No tenés equipos registrados</h2>
+
+        <p>
+            Actualmente no existen equipos
+            asociados a tu cuenta.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

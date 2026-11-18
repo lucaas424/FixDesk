@@ -35,6 +35,12 @@ def _validar_acceso_orden(orden):
 
         return
 
+    if current_user.rol == RolUsuario.CLIENTE:
+        if orden.equipo.cliente_id != current_user.id:
+            abort(403)
+
+        return
+
     abort(403)
 
 

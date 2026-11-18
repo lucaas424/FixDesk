@@ -15,6 +15,7 @@ def create_app():
 
     from app.controllers import (
         auth_bp,
+        cliente_bp,
         main_bp,
         notificacion_bp,
         orden_bp,
@@ -24,5 +25,6 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(orden_bp)
     app.register_blueprint(notificacion_bp)
+    app.register_blueprint(cliente_bp)
 
     return app

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}
+Mis reparaciones | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                PORTAL DEL CLIENTE
+            </span>
+
+            <h1>Mis reparaciones</h1>
+
+            <p>
+                Consultá el estado y seguimiento
+                de tus equipos en reparación.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    {% if ordenes %}
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Equipo</th>
+                        <th>Problema</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Recepción</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for orden in ordenes %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                #{{ orden.id }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ orden.equipo.marca }}
+                            {{ orden.equipo.modelo }}
+                        </td>
+
+                        <td class="problem-cell">
+                            {{ orden.problema_reportado }}
+                        </td>
+
+                        <td>
+                            <span class="status-pill">
+                                {{ orden.prioridad.value }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status-pill">
+                                {{ orden.estado_actual.value }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if orden.fecha_recepcion %}
+                                {{ orden.fecha_recepcion.strftime("%d/%m/%Y %H:%M") }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for(
+                                    'orden.detalle',
+                                    orden_id=orden.id
+                                ) }}"
+                                class="table-action"
+                            >
+                                Ver detalle
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% else %}
+
+    <section class="empty-state">
+
+        <h2>No tenés reparaciones</h2>
+
+        <p>
+            Actualmente no existen órdenes de reparación
+            asociadas a tus equipos.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

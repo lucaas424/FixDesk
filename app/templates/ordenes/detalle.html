@@ -26,12 +26,25 @@ Orden #{{ orden.id }} | FixDesk
             </p>
         </div>
 
-        <a
-            href="{{ url_for('orden.lista') }}"
-            class="btn-secondary"
-        >
-            Volver a órdenes
-        </a>
+{% if current_user.rol.value == "CLIENTE" %}
+
+<a
+    href="{{ url_for('cliente.reparaciones') }}"
+    class="btn-secondary"
+>
+    Volver a mis reparaciones
+</a>
+
+{% else %}
+
+<a
+    href="{{ url_for('orden.lista') }}"
+    class="btn-secondary"
+>
+    Volver a órdenes
+</a>
+
+{% endif %}
 
     </section>
 
