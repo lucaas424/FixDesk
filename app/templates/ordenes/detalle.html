@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}
+Orden #{{ orden.id }} | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ORDEN DE REPARACIÓN
+            </span>
+
+            <h1>
+                Orden #{{ orden.id }}
+            </h1>
+
+            <p>
+                Información técnica y seguimiento
+                de la reparación.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('orden.lista') }}"
+            class="btn-secondary"
+        >
+            Volver a órdenes
+        </a>
+
+    </section>
+
+
+    <section class="detail-grid">
+
+        <article class="detail-card">
+
+            <span class="detail-label">
+                ESTADO ACTUAL
+            </span>
+
+            <h2>
+                {{ orden.estado_actual.value }}
+            </h2>
+
+            <p>
+                Prioridad:
+                <strong>
+                    {{ orden.prioridad.value }}
+                </strong>
+            </p>
+
+        </article>
+
+
+        <article class="detail-card">
+
+            <span class="detail-label">
+                EQUIPO
+            </span>
+
+            <h2>
+                {{ orden.equipo.marca }}
+                {{ orden.equipo.modelo }}
+            </h2>
+
+            <p>
+                Tipo:
+                {{ orden.equipo.tipo.value }}
+            </p>
+
+            <p>
+                Serie:
+                {{ orden.equipo.numero_serie }}
+            </p>
+
+        </article>
+
+
+        <article class="detail-card">
+
+            <span class="detail-label">
+                CLIENTE
+            </span>
+
+            <h2>
+                {{ orden.equipo.cliente.nombre }}
+                {{ orden.equipo.cliente.apellido }}
+            </h2>
+
+            <p>
+                {{ orden.equipo.cliente.email }}
+            </p>
+
+        </article>
+
+    </section>
+
+
+    <section class="content-card">
+
+        <span class="detail-label">
+            PROBLEMA REPORTADO
+        </span>
+
+        <p class="detail-text">
+            {{ orden.problema_reportado }}
+        </p>
+
+        {% if orden.observaciones %}
+
+        <div class="detail-divider"></div>
+
+        <span class="detail-label">
+            OBSERVACIONES
+        </span>
+
+        <p class="detail-text">
+            {{ orden.observaciones }}
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <section class="content-card">
+
+        <div class="section-heading">
+            <div>
+                <span class="detail-label">
+                    DIAGNÓSTICO
+                </span>
+
+                <h2>Diagnóstico técnico</h2>
+            </div>
+        </div>
+
+        {% if diagnostico %}
+
+            <p class="detail-text">
+                {{ diagnostico.descripcion }}
+            </p>
+
+        {% else %}
+
+            <p class="muted-text">
+                Todavía no se registró un diagnóstico.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <section class="content-card">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="detail-label">
+                    REPARACIÓN
+                </span>
+
+                <h2>Tareas realizadas</h2>
+            </div>
+
+            <span class="counter-badge">
+                {{ tareas|length }}
+            </span>
+
+        </div>
+
+
+        {% if tareas %}
+
+        <div class="task-list">
+
+            {% for tarea in tareas %}
+
+            <div class="task-item">
+
+                <div class="task-marker">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>
+                        {{ tarea.descripcion }}
+                    </strong>
+
+                    <span>
+                        {% if tarea.fecha_realizacion %}
+                            {{ tarea.fecha_realizacion.strftime("%d/%m/%Y %H:%M") }}
+                        {% endif %}
+                    </span>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p class="muted-text">
+            Todavía no existen tareas registradas.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <section class="content-card">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="detail-label">
+                    SEGUIMIENTO
+                </span>
+
+                <h2>Historial de estados</h2>
+            </div>
+
+        </div>
+
+
+        {% if historial %}
+
+        <div class="history-list">
+
+            {% for cambio in historial %}
+
+            <div class="history-item">
+
+                <div class="history-dot"></div>
+
+                <div>
+
+                    <strong>
+                        {{ cambio.estado_anterior.value }}
+                        →
+                        {{ cambio.estado_nuevo.value }}
+                    </strong>
+
+                    <span>
+                        {{ cambio.fecha_cambio.strftime("%d/%m/%Y %H:%M") }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p class="muted-text">
+            La orden todavía no registra cambios de estado.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

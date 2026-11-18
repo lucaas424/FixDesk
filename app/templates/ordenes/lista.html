@@ -51,6 +51,7 @@
                         <th>Prioridad</th>
                         <th>Estado</th>
                         <th>Recepción</th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -98,6 +99,15 @@
                             {% else %}
                                 -
                             {% endif %}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for('orden.detalle', orden_id=orden.id) }}"
+                                class="table-action"
+                            >
+                                Ver detalle
+                            </a>
                         </td>
 
                     </tr>
