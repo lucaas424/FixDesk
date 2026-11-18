@@ -107,6 +107,114 @@ def nueva_orden():
     )
 
 
+@admin_bp.get("/ordenes/<int:orden_id>")
+@login_required
+def gestionar_orden(orden_id):
+    _validar_administrador()
+
+    try:
+        orden = AdministracionService.obtener_orden(
+            orden_id
+        )
+    except ValueError:
+        abort(404)
+
+    tecnicos = AdministracionService.listar_tecnicos()
+
+    return render_template(
+        "admin/gestionar_orden.html",
+        orden=orden,
+        tecnicos=tecnicos
+    )
+
+
+@admin_bp.post(
+    "/ordenes/<int:orden_id>/tecnico"
+)
+@login_required
+def cambiar_tecnico(orden_id):
+    _validar_administrador()
+
+    tecnico_id = request.form.get(
+        "tecnico_id",
+        type=int
+    )
+
+    if tecnico_id is None:
+        flash(
+            "Debés seleccionar un técnico.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "admin.gestionar_orden",
+                orden_id=orden_id
+            )
+        )
+
+    try:
+        AdministracionService.asignar_tecnico(
+            orden_id,
+            tecnico_id
+        )
+
+        flash(
+            "El técnico fue asignado correctamente.",
+            "success"
+        )
+
+    except ValueError as error:
+        flash(
+            str(error),
+            "danger"
+        )
+
+    return redirect(
+        url_for(
+            "admin.gestionar_orden",
+            orden_id=orden_id
+        )
+    )
+
+
+@admin_bp.post(
+    "/ordenes/<int:orden_id>/prioridad"
+)
+@login_required
+def cambiar_prioridad(orden_id):
+    _validar_administrador()
+
+    prioridad = request.form.get(
+        "prioridad",
+        ""
+    )
+
+    try:
+        AdministracionService.cambiar_prioridad(
+            orden_id,
+            prioridad
+        )
+
+        flash(
+            "La prioridad se actualizó correctamente.",
+            "success"
+        )
+
+    except ValueError as error:
+        flash(
+            str(error),
+            "danger"
+        )
+
+    return redirect(
+        url_for(
+            "admin.gestionar_orden",
+            orden_id=orden_id
+        )
+    )
+
+
 @admin_bp.get("/equipos")
 @login_required
 def equipos():

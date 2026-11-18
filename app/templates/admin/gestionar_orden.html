@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}
+Administrar orden #{{ orden.id }} | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ADMINISTRACIÓN
+            </span>
+
+            <h1>
+                Orden #{{ orden.id }}
+            </h1>
+
+            <p>
+                Gestión administrativa de la orden de reparación.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin.ordenes') }}"
+            class="btn-secondary"
+        >
+            Volver a órdenes
+        </a>
+
+    </section>
+
+
+    <section class="detail-section">
+
+        <span class="section-label">
+            INFORMACIÓN GENERAL
+        </span>
+
+        <h2>
+            {{ orden.equipo.marca }}
+            {{ orden.equipo.modelo }}
+        </h2>
+
+        <p>
+            <strong>Cliente:</strong>
+            {{ orden.equipo.cliente.nombre }}
+            {{ orden.equipo.cliente.apellido }}
+        </p>
+
+        <p>
+            <strong>Número de serie:</strong>
+            {{ orden.equipo.numero_serie }}
+        </p>
+
+        <p>
+            <strong>Problema reportado:</strong>
+            {{ orden.problema_reportado }}
+        </p>
+
+        {% if orden.observaciones %}
+
+        <p>
+            <strong>Observaciones:</strong>
+            {{ orden.observaciones }}
+        </p>
+
+        {% endif %}
+
+        <p>
+            <strong>Estado actual:</strong>
+
+            <span class="status-pill">
+                {{ orden.estado_actual.value }}
+            </span>
+        </p>
+
+    </section>
+
+
+    <section class="detail-section">
+
+        <span class="section-label">
+            TÉCNICO ASIGNADO
+        </span>
+
+        <h2>
+            {% if orden.tecnico %}
+                {{ orden.tecnico.nombre }}
+                {{ orden.tecnico.apellido }}
+            {% else %}
+                Sin técnico asignado
+            {% endif %}
+        </h2>
+
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'admin.cambiar_tecnico',
+                orden_id=orden.id
+            ) }}"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <div class="form-group">
+
+                <label for="tecnico_id">
+                    Asignar / reasignar técnico
+                </label>
+
+                <select
+                    id="tecnico_id"
+                    name="tecnico_id"
+                    required
+                >
+
+                    {% for tecnico in tecnicos %}
+
+                    <option
+                        value="{{ tecnico.id }}"
+                        {% if orden.tecnico_id == tecnico.id %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ tecnico.nombre }}
+                        {{ tecnico.apellido }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Guardar técnico
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <section class="detail-section">
+
+        <span class="section-label">
+            PRIORIDAD
+        </span>
+
+        <h2>
+            {{ orden.prioridad.value }}
+        </h2>
+
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'admin.cambiar_prioridad',
+                orden_id=orden.id
+            ) }}"
+        >
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <div class="form-group">
+
+                <label for="prioridad">
+                    Cambiar prioridad
+                </label>
+
+                <select
+                    id="prioridad"
+                    name="prioridad"
+                    required
+                >
+
+                    <option
+                        value="BAJA"
+                        {% if orden.prioridad.value == "BAJA" %}
+                        selected
+                        {% endif %}
+                    >
+                        BAJA
+                    </option>
+
+                    <option
+                        value="NORMAL"
+                        {% if orden.prioridad.value == "NORMAL" %}
+                        selected
+                        {% endif %}
+                    >
+                        NORMAL
+                    </option>
+
+                    <option
+                        value="ALTA"
+                        {% if orden.prioridad.value == "ALTA" %}
+                        selected
+                        {% endif %}
+                    >
+                        ALTA
+                    </option>
+
+                    <option
+                        value="URGENTE"
+                        {% if orden.prioridad.value == "URGENTE" %}
+                        selected
+                        {% endif %}
+                    >
+                        URGENTE
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Actualizar prioridad
+            </button>
+
+        </form>
+
+    </section>
+
+</div>
+
+{% endblock %}

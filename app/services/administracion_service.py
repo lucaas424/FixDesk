@@ -14,6 +14,10 @@ class AdministracionService:
         return OrdenService.listar_ordenes()
 
     @staticmethod
+    def obtener_orden(orden_id):
+        return OrdenService.obtener_orden(orden_id)
+
+    @staticmethod
     def listar_equipos():
         return EquipoRepository.listar_todos()
 
@@ -43,4 +47,18 @@ class AdministracionService:
             problema_reportado=problema_reportado,
             prioridad=prioridad,
             observaciones=observaciones
+        )
+
+    @staticmethod
+    def asignar_tecnico(orden_id, tecnico_id):
+        return OrdenService.asignar_tecnico(
+            orden_id,
+            tecnico_id
+        )
+
+    @staticmethod
+    def cambiar_prioridad(orden_id, prioridad):
+        return OrdenService.cambiar_prioridad(
+            orden_id,
+            prioridad
         )
