@@ -24,12 +24,23 @@ Administración de órdenes | FixDesk
             </p>
         </div>
 
-        <a
-            href="{{ url_for('main.inicio') }}"
-            class="btn-secondary"
-        >
-            Volver al inicio
-        </a>
+        <div>
+
+    <a
+        href="{{ url_for('admin.nueva_orden') }}"
+        class="btn-primary"
+    >
+        Nueva orden
+    </a>
+
+    <a
+        href="{{ url_for('main.inicio') }}"
+        class="btn-secondary"
+    >
+        Volver al inicio
+    </a>
+
+</div>
 
     </section>
 

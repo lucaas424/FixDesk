@@ -1,4 +1,12 @@
-from flask import Blueprint, abort, render_template
+from flask import (
+    Blueprint,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from flask_login import current_user, login_required
 
 from app.models import RolUsuario
@@ -27,6 +35,75 @@ def ordenes():
     return render_template(
         "admin/ordenes.html",
         ordenes=lista_ordenes
+    )
+
+
+@admin_bp.route(
+    "/ordenes/nueva",
+    methods=["GET", "POST"]
+)
+@login_required
+def nueva_orden():
+    _validar_administrador()
+
+    equipos = AdministracionService.listar_equipos()
+    tecnicos = AdministracionService.listar_tecnicos()
+
+    if request.method == "POST":
+
+        equipo_id = request.form.get(
+            "equipo_id",
+            type=int
+        )
+
+        tecnico_id = request.form.get(
+            "tecnico_id",
+            type=int
+        )
+
+        problema_reportado = request.form.get(
+            "problema_reportado",
+            ""
+        )
+
+        prioridad = request.form.get(
+            "prioridad",
+            "NORMAL"
+        )
+
+        observaciones = request.form.get(
+            "observaciones",
+            ""
+        )
+
+        try:
+            orden = AdministracionService.crear_orden(
+                equipo_id=equipo_id,
+                tecnico_id=tecnico_id,
+                problema_reportado=problema_reportado,
+                prioridad=prioridad,
+                observaciones=observaciones
+            )
+
+            flash(
+                f"La orden #{orden.id} se creó correctamente.",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin.ordenes")
+            )
+
+        except ValueError as error:
+            flash(
+                str(error),
+                "danger"
+            )
+
+    return render_template(
+        "admin/nueva_orden.html",
+        equipos=equipos,
+        tecnicos=tecnicos
     )
 
 

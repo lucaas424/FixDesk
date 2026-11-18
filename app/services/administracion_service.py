@@ -28,3 +28,19 @@ class AdministracionService:
         return UsuarioRepository.listar_por_rol(
             RolUsuario.TECNICO
         )
+
+    @staticmethod
+    def crear_orden(
+        equipo_id,
+        tecnico_id,
+        problema_reportado,
+        prioridad,
+        observaciones=None
+    ):
+        return OrdenService.crear_orden(
+            equipo_id=equipo_id,
+            tecnico_id=tecnico_id,
+            problema_reportado=problema_reportado,
+            prioridad=prioridad,
+            observaciones=observaciones
+        )
