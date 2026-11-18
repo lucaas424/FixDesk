@@ -4,6 +4,7 @@ from app.repositories import (
     UsuarioRepository,
 )
 
+from app.services.auth_service import AuthService
 from app.services.orden_service import OrdenService
 
 
@@ -61,4 +62,19 @@ class AdministracionService:
         return OrdenService.cambiar_prioridad(
             orden_id,
             prioridad
+        )
+
+    @staticmethod
+    def registrar_tecnico(
+        nombre,
+        apellido,
+        email,
+        password
+    ):
+        return AuthService.registrar_usuario(
+            nombre=nombre,
+            apellido=apellido,
+            email=email,
+            password=password,
+            rol=RolUsuario.TECNICO
         )

@@ -240,6 +240,63 @@ def clientes():
         clientes=lista_clientes
     )
 
+@admin_bp.route(
+    "/tecnicos/nuevo",
+    methods=["GET", "POST"]
+)
+@login_required
+def nuevo_tecnico():
+    _validar_administrador()
+
+    if request.method == "POST":
+
+        nombre = request.form.get(
+            "nombre",
+            ""
+        )
+
+        apellido = request.form.get(
+            "apellido",
+            ""
+        )
+
+        email = request.form.get(
+            "email",
+            ""
+        )
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+        try:
+            tecnico = AdministracionService.registrar_tecnico(
+                nombre=nombre,
+                apellido=apellido,
+                email=email,
+                password=password
+            )
+
+            flash(
+                f"El técnico {tecnico.nombre} "
+                f"{tecnico.apellido} se registró correctamente.",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin.tecnicos")
+            )
+
+        except ValueError as error:
+            flash(
+                str(error),
+                "danger"
+            )
+
+    return render_template(
+        "admin/nuevo_tecnico.html"
+    )
 
 @admin_bp.get("/tecnicos")
 @login_required
