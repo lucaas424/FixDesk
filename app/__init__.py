@@ -14,6 +14,7 @@ def create_app():
     csrf.init_app(app)
 
     from app.controllers import (
+        admin_bp,
         auth_bp,
         cliente_bp,
         main_bp,
@@ -26,5 +27,6 @@ def create_app():
     app.register_blueprint(orden_bp)
     app.register_blueprint(notificacion_bp)
     app.register_blueprint(cliente_bp)
+    app.register_blueprint(admin_bp)
 
     return app

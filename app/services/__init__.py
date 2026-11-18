@@ -4,3 +4,4 @@ from app.services.orden_service import OrdenService
 from app.services.diagnostico_service import DiagnosticoService
 from app.services.tarea_service import TareaService
 from app.services.notificacion_service import NotificacionService
+from app.services.administracion_service import AdministracionService

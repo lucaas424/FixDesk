@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+Administración de equipos | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ADMINISTRACIÓN
+            </span>
+
+            <h1>Equipos</h1>
+
+            <p>
+                Consulta de todos los equipos registrados.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    {% if equipos %}
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Número de serie</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for equipo in equipos %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ equipo.marca }}
+                                {{ equipo.modelo }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ equipo.tipo.value }}
+                        </td>
+
+                        <td>
+                            {{ equipo.numero_serie }}
+                        </td>
+
+                        <td>
+                            {{ equipo.cliente.nombre }}
+                            {{ equipo.cliente.apellido }}
+                        </td>
+
+                        <td>
+                            {% if equipo.activo %}
+                                <span class="status-pill">
+                                    ACTIVO
+                                </span>
+                            {% else %}
+                                <span class="status-pill">
+                                    INACTIVO
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

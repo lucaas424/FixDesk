@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}
+Administración de órdenes | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ADMINISTRACIÓN
+            </span>
+
+            <h1>Órdenes de reparación</h1>
+
+            <p>
+                Consulta general de las órdenes registradas
+                en FixDesk.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    {% if ordenes %}
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Equipo</th>
+                        <th>Cliente</th>
+                        <th>Técnico</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for orden in ordenes %}
+
+                    <tr>
+
+                        <td>
+                            <strong>#{{ orden.id }}</strong>
+                        </td>
+
+                        <td>
+                            {{ orden.equipo.marca }}
+                            {{ orden.equipo.modelo }}
+                        </td>
+
+                        <td>
+                            {{ orden.equipo.cliente.nombre }}
+                            {{ orden.equipo.cliente.apellido }}
+                        </td>
+
+                        <td>
+                            {% if orden.tecnico %}
+                                {{ orden.tecnico.nombre }}
+                                {{ orden.tecnico.apellido }}
+                            {% else %}
+                                Sin asignar
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="status-pill">
+                                {{ orden.prioridad.value }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status-pill">
+                                {{ orden.estado_actual.value }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for(
+                                    'orden.detalle',
+                                    orden_id=orden.id
+                                ) }}"
+                                class="table-action"
+                            >
+                                Ver detalle
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% else %}
+
+    <section class="empty-state">
+        <h2>No existen órdenes</h2>
+        <p>No hay órdenes registradas actualmente.</p>
+    </section>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

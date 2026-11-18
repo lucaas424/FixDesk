@@ -36,7 +36,76 @@ Inicio | FixDesk
     <section class="dashboard-grid">
 
 
-        {% if current_user.rol.value == "CLIENTE" %}
+        {% if current_user.rol.value == "ADMINISTRADOR" %}
+
+
+        <a
+            href="{{ url_for('admin.ordenes') }}"
+            class="dashboard-card dashboard-link"
+        >
+            <div class="card-icon">
+                01
+            </div>
+
+            <h2>Órdenes</h2>
+
+            <p>
+                Gestión general de órdenes de reparación.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.equipos') }}"
+            class="dashboard-card dashboard-link"
+        >
+            <div class="card-icon">
+                02
+            </div>
+
+            <h2>Equipos</h2>
+
+            <p>
+                Consulta de equipos registrados.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.clientes') }}"
+            class="dashboard-card dashboard-link"
+        >
+            <div class="card-icon">
+                03
+            </div>
+
+            <h2>Clientes</h2>
+
+            <p>
+                Consulta de clientes registrados.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.tecnicos') }}"
+            class="dashboard-card dashboard-link"
+        >
+            <div class="card-icon">
+                04
+            </div>
+
+            <h2>Técnicos</h2>
+
+            <p>
+                Consulta del personal técnico.
+            </p>
+        </a>
+
+
+
+        {% elif current_user.rol.value == "CLIENTE" %}
+
 
         <a
             href="{{ url_for('cliente.reparaciones') }}"
@@ -85,6 +154,7 @@ Inicio | FixDesk
                 de estado de tus reparaciones.
             </p>
         </a>
+
 
 
         {% else %}
@@ -138,7 +208,9 @@ Inicio | FixDesk
 
         </article>
 
+
         {% endif %}
+
 
     </section>
 

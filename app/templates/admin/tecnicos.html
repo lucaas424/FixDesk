@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}
+Técnicos | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ADMINISTRACIÓN
+            </span>
+
+            <h1>Técnicos</h1>
+
+            <p>
+                Personal técnico registrado en FixDesk.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for tecnico in tecnicos %}
+
+                    <tr>
+
+                        <td>
+                            #{{ tecnico.id }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ tecnico.nombre }}
+                                {{ tecnico.apellido }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ tecnico.email }}
+                        </td>
+
+                        <td>
+                            {% if tecnico.activo %}
+                                <span class="status-pill">
+                                    ACTIVO
+                                </span>
+                            {% else %}
+                                <span class="status-pill">
+                                    INACTIVO
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

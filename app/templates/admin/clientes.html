@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}
+Clientes | FixDesk
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard">
+
+    <section class="page-header">
+
+        <div>
+            <span class="section-label">
+                ADMINISTRACIÓN
+            </span>
+
+            <h1>Clientes</h1>
+
+            <p>
+                Usuarios registrados con rol de cliente.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('main.inicio') }}"
+            class="btn-secondary"
+        >
+            Volver al inicio
+        </a>
+
+    </section>
+
+
+    <section class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for cliente in clientes %}
+
+                    <tr>
+
+                        <td>
+                            #{{ cliente.id }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ cliente.nombre }}
+                                {{ cliente.apellido }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ cliente.email }}
+                        </td>
+
+                        <td>
+                            {% if cliente.activo %}
+                                <span class="status-pill">
+                                    ACTIVO
+                                </span>
+                            {% else %}
+                                <span class="status-pill">
+                                    INACTIVO
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
