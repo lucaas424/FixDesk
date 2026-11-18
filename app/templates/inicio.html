@@ -35,7 +35,10 @@ Inicio | FixDesk
 
     <section class="dashboard-grid">
 
-        <article class="dashboard-card">
+        <a
+            href="{{ url_for('orden.lista') }}"
+            class="dashboard-card dashboard-link"
+        >
             <div class="card-icon">
                 01
             </div>
@@ -46,7 +49,7 @@ Inicio | FixDesk
                 Gestión y seguimiento de órdenes
                 de reparación.
             </p>
-        </article>
+        </a>
 
 
         <article class="dashboard-card">

@@ -13,9 +13,10 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
 
-    from app.controllers import auth_bp, main_bp
+    from app.controllers import auth_bp, main_bp, orden_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(orden_bp)
 
     return app
