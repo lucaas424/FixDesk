@@ -23,12 +23,23 @@ Clientes | FixDesk
             </p>
         </div>
 
-        <a
-            href="{{ url_for('main.inicio') }}"
-            class="btn-secondary"
-        >
-            Volver al inicio
-        </a>
+        <div class="page-actions">
+
+    <a
+        href="{{ url_for('admin.nuevo_cliente') }}"
+        class="btn-primary"
+    >
+        Nuevo cliente
+    </a>
+
+    <a
+        href="{{ url_for('main.inicio') }}"
+        class="btn-secondary"
+    >
+        Volver al inicio
+    </a>
+
+</div>
 
     </section>
 

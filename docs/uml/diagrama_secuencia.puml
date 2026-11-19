@@ -1,6 +1,5 @@
 @startuml
-title FixDesk - Diagrama de Secuencia
-subtitle Caso de Uso: Cambiar estado de reparación
+title FixDesk - Diagrama de Secuencia\nCaso de Uso: Cambiar estado de reparación
 
 actor Tecnico
 
@@ -24,6 +23,7 @@ DB --> Repository : datos de la orden
 Repository --> Service : OrdenReparacion
 
 alt Orden inexistente
+
     Service --> Controller : error("Orden no encontrada")
     Controller --> Tecnico : mostrar mensaje de error
 
@@ -31,7 +31,8 @@ else Orden encontrada
 
     Service -> Service : validarPermisos(usuarioActual, orden)
 
-    alt Técnico no autorizado
+    alt Tecnico no autorizado
+
         Service --> Controller : error("Sin permisos")
         Controller --> Tecnico : mostrar acceso denegado
 
@@ -39,39 +40,49 @@ else Orden encontrada
 
         Service -> Service : validarTransicion(estadoActual, nuevoEstado)
 
-        alt Transición no permitida
-            Service --> Controller : error("Transición inválida")
+        alt Transicion no permitida
+
+            Service --> Controller : error("Transicion invalida")
             Controller --> Tecnico : mostrar estado no permitido
 
-        else Transición válida
+        else Transicion valida
 
             Service -> Orden : cambiarEstado(nuevoEstado)
             Orden --> Service : estado actualizado
 
             Service -> Repository : guardar(orden)
-            Repository -> DB : UPDATE orden_reparacion
-            DB --> Repository : confirmación
 
-            Service -> HistorialRepo : registrarCambio(...)
+            Repository -> DB : UPDATE orden_reparacion
+            DB --> Repository : confirmacion
+            Repository --> Service : orden guardada
+
+            Service -> HistorialRepo : registrarCambio(orden, estadoAnterior,\nnuevoEstado, usuarioActual)
+
             HistorialRepo -> DB : INSERT historial_estado
-            DB --> HistorialRepo : confirmación
+            DB --> HistorialRepo : confirmacion
+            HistorialRepo --> Service : historial registrado
 
             alt nuevoEstado == LISTO_PARA_RETIRAR
+
                 Service -> NotifService : generarNotificacion(cliente, orden)
 
                 NotifService -> NotifRepo : guardar(notificacion)
-                NotifRepo -> DB : INSERT notificacion
-                DB --> NotifRepo : confirmación
 
-                NotifRepo --> NotifService : notificación creada
-                NotifService --> Service : notificación generada
+                NotifRepo -> DB : INSERT notificacion
+                DB --> NotifRepo : confirmacion
+                NotifRepo --> NotifService : notificacion creada
+
+                NotifService --> Service : notificacion generada
+
             end
 
             Service --> Controller : cambio exitoso
             Controller --> Tecnico : mostrar nuevo estado
 
         end
+
     end
+
 end
 
 @enduml

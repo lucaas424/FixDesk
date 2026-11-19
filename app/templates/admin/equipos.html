@@ -23,12 +23,24 @@ Administración de equipos | FixDesk
             </p>
         </div>
 
-        <a
-            href="{{ url_for('main.inicio') }}"
-            class="btn-secondary"
-        >
-            Volver al inicio
-        </a>
+
+        <div class="page-actions">
+
+            <a
+                href="{{ url_for('admin.nuevo_equipo') }}"
+                class="btn-primary"
+            >
+                Nuevo equipo
+            </a>
+
+            <a
+                href="{{ url_for('main.inicio') }}"
+                class="btn-secondary"
+            >
+                Volver al inicio
+            </a>
+
+        </div>
 
     </section>
 
@@ -51,6 +63,7 @@ Administración de equipos | FixDesk
                     </tr>
                 </thead>
 
+
                 <tbody>
 
                     {% for equipo in equipos %}
@@ -64,29 +77,39 @@ Administración de equipos | FixDesk
                             </strong>
                         </td>
 
+
                         <td>
                             {{ equipo.tipo.value }}
                         </td>
 
+
                         <td>
                             {{ equipo.numero_serie }}
                         </td>
+
 
                         <td>
                             {{ equipo.cliente.nombre }}
                             {{ equipo.cliente.apellido }}
                         </td>
 
+
                         <td>
+
                             {% if equipo.activo %}
-                                <span class="status-pill">
-                                    ACTIVO
-                                </span>
+
+                            <span class="status-pill">
+                                ACTIVO
+                            </span>
+
                             {% else %}
-                                <span class="status-pill">
-                                    INACTIVO
-                                </span>
+
+                            <span class="status-pill">
+                                INACTIVO
+                            </span>
+
                             {% endif %}
+
                         </td>
 
                     </tr>
@@ -98,6 +121,21 @@ Administración de equipos | FixDesk
             </table>
 
         </div>
+
+    </section>
+
+
+    {% else %}
+
+    <section class="empty-card">
+
+        <h2>
+            No hay equipos registrados
+        </h2>
+
+        <p>
+            Actualmente no existen equipos registrados en FixDesk.
+        </p>
 
     </section>
 

@@ -25,6 +25,10 @@ def _validar_administrador():
         abort(403)
 
 
+# =========================================================
+# ÓRDENES
+# =========================================================
+
 @admin_bp.get("/ordenes")
 @login_required
 def ordenes():
@@ -215,6 +219,10 @@ def cambiar_prioridad(orden_id):
     )
 
 
+# =========================================================
+# EQUIPOS
+# =========================================================
+
 @admin_bp.get("/equipos")
 @login_required
 def equipos():
@@ -227,6 +235,87 @@ def equipos():
         equipos=lista_equipos
     )
 
+@admin_bp.route(
+    "/equipos/nuevo",
+    methods=["GET", "POST"]
+)
+@login_required
+def nuevo_equipo():
+    _validar_administrador()
+
+    clientes = AdministracionService.listar_clientes()
+
+    if request.method == "POST":
+
+        cliente_id = request.form.get(
+            "cliente_id",
+            type=int
+        )
+
+        tipo = request.form.get(
+            "tipo",
+            ""
+        )
+
+        marca = request.form.get(
+            "marca",
+            ""
+        )
+
+        modelo = request.form.get(
+            "modelo",
+            ""
+        )
+
+        numero_serie = request.form.get(
+            "numero_serie",
+            ""
+        )
+
+        if cliente_id is None:
+            flash(
+                "Debés seleccionar un cliente.",
+                "danger"
+            )
+
+            return render_template(
+                "admin/nuevo_equipo.html",
+                clientes=clientes
+            )
+
+        try:
+            equipo = AdministracionService.registrar_equipo(
+                cliente_id=cliente_id,
+                tipo=tipo,
+                marca=marca,
+                modelo=modelo,
+                numero_serie=numero_serie
+            )
+
+            flash(
+                f"El equipo {equipo.marca} "
+                f"{equipo.modelo} se registró correctamente.",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin.equipos")
+            )
+
+        except ValueError as error:
+            flash(
+                str(error),
+                "danger"
+            )
+
+    return render_template(
+        "admin/nuevo_equipo.html",
+        clientes=clientes
+    )
+
+# =========================================================
+# CLIENTES
+# =========================================================
 
 @admin_bp.get("/clientes")
 @login_required
@@ -239,6 +328,70 @@ def clientes():
         "admin/clientes.html",
         clientes=lista_clientes
     )
+
+
+@admin_bp.route(
+    "/clientes/nuevo",
+    methods=["GET", "POST"]
+)
+@login_required
+def nuevo_cliente():
+    _validar_administrador()
+
+    if request.method == "POST":
+
+        nombre = request.form.get(
+            "nombre",
+            ""
+        )
+
+        apellido = request.form.get(
+            "apellido",
+            ""
+        )
+
+        email = request.form.get(
+            "email",
+            ""
+        )
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+        try:
+            cliente = AdministracionService.registrar_cliente(
+                nombre=nombre,
+                apellido=apellido,
+                email=email,
+                password=password
+            )
+
+            flash(
+                f"El cliente {cliente.nombre} "
+                f"{cliente.apellido} se registró correctamente.",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin.clientes")
+            )
+
+        except ValueError as error:
+            flash(
+                str(error),
+                "danger"
+            )
+
+    return render_template(
+        "admin/nuevo_cliente.html"
+    )
+
+
+# =========================================================
+# TÉCNICOS
+# =========================================================
 
 @admin_bp.route(
     "/tecnicos/nuevo",
@@ -297,6 +450,7 @@ def nuevo_tecnico():
     return render_template(
         "admin/nuevo_tecnico.html"
     )
+
 
 @admin_bp.get("/tecnicos")
 @login_required

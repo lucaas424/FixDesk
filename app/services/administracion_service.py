@@ -6,6 +6,7 @@ from app.repositories import (
 
 from app.services.auth_service import AuthService
 from app.services.orden_service import OrdenService
+from app.services.equipo_service import EquipoService
 
 
 class AdministracionService:
@@ -21,6 +22,22 @@ class AdministracionService:
     @staticmethod
     def listar_equipos():
         return EquipoRepository.listar_todos()
+
+    @staticmethod
+    def registrar_equipo(
+        cliente_id,
+        tipo,
+        marca,
+        modelo,
+        numero_serie
+    ):
+        return EquipoService.registrar_equipo(
+            cliente_id=cliente_id,
+            tipo=tipo,
+            marca=marca,
+            modelo=modelo,
+            numero_serie=numero_serie
+        )
 
     @staticmethod
     def listar_clientes():
@@ -77,4 +94,18 @@ class AdministracionService:
             email=email,
             password=password,
             rol=RolUsuario.TECNICO
+        )
+    @staticmethod
+    def registrar_cliente(
+        nombre,
+        apellido,
+        email,
+        password
+    ):
+        return AuthService.registrar_usuario(
+            nombre=nombre,
+            apellido=apellido,
+            email=email,
+            password=password,
+            rol=RolUsuario.CLIENTE
         )
