@@ -1,4 +1,4 @@
-@startuml
+@startuml diagrama_caso_uso_gestion_ordenes
 title FixDesk - Caso de Uso Detallado\nGestión de Órdenes de Reparación
 
 left to right direction
